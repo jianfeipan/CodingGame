@@ -11,52 +11,37 @@ using namespace std;
  * the standard input according to the problem statement.
  **/
  
-bool withIn(int x,int y,int ax,int ay,int bx,int by)
-{
-    if(x==0 && y == 0)
-        return true;
-    if(x*(by - ay) != y*(bx-ax))
-    {
-        return std::pow((y*(bx-ax) -x * (by - ay)), 2) <= std::pow(ay*bx - ax*by,2);
-    }
-    else
-    {
-        cerr<< x << "?" <<y<<endl;
-        cerr<< x << "?" <<y<<endl;
-        return (std::abs(x-ax) + std::abs(x-bx) == std::abs(ax-bx))
-        && (std::abs(y-ay) + std::abs(y-by) == std::abs(ay-by)) ;
-    }
-}
-  
 
-bool between(int x,int y,int ax,int ay,int bx,int by)
-{
-    /*
-
-    degree(ax, ay) < degree(x,y) < degree(bx,by) 
-
-    */
-    
-    if(ax*y >= ay * x)
-    {
-        return bx*y <= by*x;
-    }
-    return false;
-}
- 
 bool hit(int x, int y, std::vector<std::pair<int, int> > & target )
 {
+    int crossCount = 0;
     for(int i = 0; i < target.size(); i++)
     {
         const auto & pointA = target[i];
         const auto & pointB = target[(i+1)% target.size()];    
         
-        if(between(x,y,pointA.first,pointA.second,pointB.first,pointB.second))
+        const auto & ax = pointA.first;
+        const auto & ay = pointA.second;
+        const auto & bx = pointB.first;
+        const auto & by = pointB.second;
+        
+        if((ay != by)
+        && std::max(ay, by) > y
+        && std::min(ay, by) <= y)
         {
-            return withIn(x,y,pointA.first,pointA.second,pointB.first,pointB.second);
+            /*
+            (x-ax) / (y - ay) = (bx - ax) / (by - ay)   
+            */
+            if( x < (bx - ax)* (y - ay) / (by - ay)  + ax)
+            {
+                crossCount++;
+                //cerr<< x<< '-' << y<< ':' << crossCount<< ax << ','<<ay<< " to " <<bx<<','<<by << " :: " << x<< "<= "<<((bx - ax)* (y - ay) / (by - ay)  + ax) <<endl;
+            }
+            
         }
         
     }
+    return crossCount%2 == 1;
 }
 
 int main()
