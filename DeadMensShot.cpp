@@ -32,7 +32,7 @@ bool hit(int x, int y, std::vector<std::pair<int, int> > & target )
             /*
             (x-ax) / (y - ay) = (bx - ax) / (by - ay)   
             */
-            if( x < (bx - ax)* (y - ay) / (by - ay)  + ax)
+            if( x < (bx - ax)* (y - ay) / (by - ay)  + ax) // !Attention : here all the variables are int, make the divide last operation
             {
                 crossCount++;
                 //cerr<< x<< '-' << y<< ':' << crossCount<< ax << ','<<ay<< " to " <<bx<<','<<by << " :: " << x<< "<= "<<((bx - ax)* (y - ay) / (by - ay)  + ax) <<endl;
